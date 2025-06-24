@@ -2,7 +2,8 @@ import openai
 from openai import OpenAI
 
 # Step 1: Initialize client with your API key
-client = OpenAI(api_key="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")
+import os
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Step 2: Load the scraped .txt file
 filename = "pinnaclefirearmsandtraining_com_text.txt"
@@ -19,13 +20,20 @@ prompt = (
 )
 
 # Step 4: Call the GPT API
+from openai import OpenAI
+
+client = OpenAI()
+
 response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": prompt}
-    ],
-    temperature=0.2,
+    ]
 )
+
+print(response.choices[0].message.content)
+
 
 # Step 5: Print the extracted brands
 print("\n🔍 GPT Output:\n")
